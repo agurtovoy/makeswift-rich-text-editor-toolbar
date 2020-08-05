@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 export interface ToolbarProps extends Omit<PopperProps, "children"> {}
 
 export function Toolbar(props: ToolbarProps) {
-  const [link, setLink] = React.useState(null);
+  const [link, setLink] = React.useState<string | null>(null);
   const s = useStyles();
 
   return (
