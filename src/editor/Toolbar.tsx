@@ -86,6 +86,7 @@ export const Toolbar = () => {
     ReactEditor.focus(editor);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const toolbarVisible = enteringLink || (ReactEditor.isFocused(editor) && hasNonEmptySelection(editor));
     setShowToolbar(toolbarVisible);
