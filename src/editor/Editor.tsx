@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { createEditor, Node } from "slate";
 import {
   Editable,
@@ -8,16 +8,27 @@ import {
   RenderLeafProps,
 } from "slate-react";
 
-import { DefaultElement } from "./elements";
-import { Toolbar } from "./Toolbar";
+import { withHistory } from 'slate-history';
 
-function renderElement(props: RenderElementProps) {
-  const { attributes, children } = props;
-  return <DefaultElement {...attributes}>{children}</DefaultElement>;
+import { DefaultElement, LinkElement } from "./elements";
+import { Toolbar } from "./Toolbar";
+import { withLinks } from "./components/LinkButton";
+
+function renderElement({ attributes, children, element }: RenderElementProps) {
+  switch (element.type) {
+    case 'link':
+      return <LinkElement {...attributes} href={element.url}>{children}</LinkElement>;
+
+    default:
+      return <DefaultElement {...attributes}>{children}</DefaultElement>;
+  }
 }
 
-function renderLeaf(props: RenderLeafProps) {
-  const { attributes, children } = props;
+function renderLeaf({ attributes, children, leaf }: RenderLeafProps) {
+  if (leaf.bold) children = <strong>{children}</strong>;
+  if (leaf.italic) children = <em>{children}</em>;
+  if (leaf.underline) children = <u>{children}</u>;
+
   return <span {...attributes}>{children}</span>;
 }
 
@@ -31,11 +42,11 @@ export interface EditorProps {
 
 export function Editor(props: EditorProps) {
   const { value, onChange, ...other } = props;
-  const editor = React.useMemo(() => withReact(createEditor()), []);
+  const editor = useMemo(() => withLinks(withHistory(withReact(createEditor()))), []);
 
   return (
     <Slate editor={editor} value={value} onChange={onChange}>
-      <Toolbar open={true} />
+      <Toolbar />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}

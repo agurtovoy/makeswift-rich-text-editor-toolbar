@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 const initialValue: Node[] = [
   {
     type: "paragraph",
-    children: [{ text: "" }],
+    children: [{ text: "The sun did not shine. It was too wet to play. So we sat in the house, all that cold, cold, wet day." }],
   },
 ];
 
